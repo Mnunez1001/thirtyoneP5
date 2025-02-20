@@ -2,13 +2,48 @@ package edu.guilford;
 
 import java.util.*;
 
+/**
+ * Represents a game of Thirty-One.
+ * Manages the players, deck, and game logic.
+ * 
+ * @author Miguel A. Nunez Palomares
+ * @version 1.0
+ * @see java.util.List, java.util.ArrayList, java.util.Stack, java.util.Queue,
+ *      java.util.Random
+ */
+
 public class Game {
+
+    /**
+     * List of players in the game.
+     */
     private List<Player> players;
+
+    /**
+     * The deck of cards used in the game.
+     */
     private Deck deck;
+
+    /**
+     * The discard pile of cards.
+     */
     private Stack<Card> discardPile;
+
+    /**
+     * The stock pile of cards.
+     */
     private Queue<Card> stockPile;
+
+    /**
+     * Random number generator for game operations.
+     */
     private Random rand;
 
+    /**
+     * Constructs a Game with the specified number of players.
+     *
+     * @param numPlayers The number of players in the game.
+     */
     public Game(int numPlayers) {
         players = new ArrayList<>(); // Creates a list to store the players in the game.
         deck = new Deck(); // Creates a new deck of cards
@@ -24,6 +59,9 @@ public class Game {
         startNewRound(); // Starts a new round of the game.
     }
 
+    /**
+     * Starts a new round by shuffling and distributing cards to players.
+     */
     private void startNewRound() {
         deck.build(); // Builds a new deck of cards.
         deck.shuffle(); // Shuffles the deck.
@@ -64,6 +102,9 @@ public class Game {
      * Once only one player is left, the game stops.
      */
 
+    /**
+     * Plays the game until only one player has lives remaining.
+     */
     public void play() {
         while (players.stream().filter(p -> p.getLives() > 0).count() > 1) { // This loop continues until only one
                                                                              // player has lives remaining.
@@ -155,6 +196,13 @@ public class Game {
         }
     }
 
+    /**
+     * Determines if the player should take the top card of the discard pile.
+     *
+     * @param player     The player making the decision.
+     * @param topDiscard The top card of the discard pile.
+     * @return true if the player should take the top card; false otherwise.
+     */
     private boolean shouldTakeDiscard(Player player, Card topDiscard) { // Determines if the player should take the top
                                                                         // card of the discard pile.
         Hand hand = player.getHand();
@@ -167,6 +215,12 @@ public class Game {
         return false;
     }
 
+    /**
+     * Discards a card from the player's hand, with a random choice between the
+     * discard pile and stockpile.
+     *
+     * @param player The player discarding a card.
+     */
     private void discardCard(Player player) { // Discards a card from the player's hand.
         Hand hand = player.getHand();
         Card.Suit preferredSuit = getPreferredSuit(hand); // Gets the preferred suit for the player.
@@ -219,6 +273,13 @@ public class Game {
      * .get() → Retrieves the winning (suit, count) pair.
      * .getKey() → Extracts and returns the suit.
      */
+
+    /**
+     * Gets the preferred suit for the player based on the suits in their hand.
+     * 
+     * @param hand
+     * @return The preferred suit for the player.
+     */
     private Card.Suit getPreferredSuit(Hand hand) {
         Map<Card.Suit, Integer> suitCount = new HashMap<>();
         for (Card card : hand.getHand()) {
@@ -227,13 +288,25 @@ public class Game {
         return suitCount.entrySet().stream().max(Map.Entry.comparingByValue()).get().getKey();
     }
 
+    /**
+     * Determines if the player should knock based on their hand value.
+     * 
+     * @param player
+     * @return true if the player should knock; false otherwise.
+     */
+
     private boolean shouldKnock(Player player) {
         return player.getHand().getTotalValue() >= 25; // The player should knock if their hand value is 25 or more.
     }
 
+    /**
+     * Resolves the round after a player knocks.
+     * 
+     * @param knocker The player who knocked.
+     */
     private void resolveRound(Player knocker) { // Resolves the round after a player knocks.
-        //int knockerScore = knocker.getHand().getTotalValue();
-        //System.out.println(knocker.getName() + " has a score of " + knockerScore);
+        // int knockerScore = knocker.getHand().getTotalValue();
+        // System.out.println(knocker.getName() + " has a score of " + knockerScore);
 
         // map, which holds players and their hand values
         // Collect scores for all players still in the game
@@ -249,7 +322,8 @@ public class Game {
 
         /**
          * playerScores.values() Get all scores.
-         * .stream() Turn it into a stream for processing. allows us to perform operations on the scores.
+         * .stream() Turn it into a stream for processing. allows us to perform
+         * operations on the scores.
          * .min(Integer::compareTo) Find the minimum score.
          * .orElse(Integer.MAX_VALUE) Return the minimum, or a large fallback value if
          * empty.
@@ -283,6 +357,11 @@ public class Game {
             System.out.println(player.getName() + ": " + player.getLives() + " lives remaining.");
         }
     }
+
+    /**
+     * Ensures the discard pile is not empty by moving a card from the stock pile if
+     * needed.
+     */
 
     private void ensureDiscardPileNotEmpty() {
         if (discardPile.isEmpty()) {

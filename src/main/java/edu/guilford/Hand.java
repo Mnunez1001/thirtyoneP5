@@ -2,38 +2,89 @@ package edu.guilford;
 
 import java.util.ArrayList;
 
+/**
+ * Represents a hand of cards held by a player in the game.
+ * A hand is a collection of cards that a player holds.
+ * The hand class is used to keep track of the cards a player has.
+ * 
+ * @author Miguel A. Nunez Palomares
+ * @version 1.0
+ * @see java.util.ArrayList
+ */
+
 public class Hand {
+
+    /**
+     * ArrayList of cards representing the hand.
+     */
     private ArrayList<Card> hand;
 
+    /**
+     * Constructor for Hand class.
+     * Initializes the hand as an empty ArrayList of cards.
+     */
     public Hand() {
         hand = new ArrayList<Card>();
     }
 
+    /**
+     * Gets the list of cards in the hand.
+     * 
+     * @return the list of cards in the hand
+     */
     public ArrayList<Card> getHand() {
         return hand;
     }
 
+    /**
+     * Adds a card to the hand.
+     * 
+     * @param card the card to add
+     */
     public void addCard(Card card) {
         hand.add(card);
     }
 
+    /**
+     * Removes a card from the hand.
+     * 
+     * @param card the card to remove
+     */
     public void removeCard(Card card) {
         hand.remove(card);
     }
 
+    /**
+     * Clears all cards from the hand.
+     */
     public void reset() {
         hand.clear();
     }
 
+    /**
+     * Gets the number of cards in the hand.
+     * 
+     * @return the number of cards in the hand
+     */
     public int size() {
         return hand.size();
     }
 
+    /**
+     * Gets a card from the hand by index.
+     * 
+     * @param index the index of the card to retrieve
+     * @return the card at the specified index
+     */
     public Card getCard(int index) {
         return hand.get(index);
     }
 
-    // Calculate the value of the hand
+    /**
+     * Calculates the total value of the hand based on the highest value suit.
+     * 
+     * @return the total value of the hand
+     */
     public int getTotalValue() {
         int maxValue = 0;
         int[] values = new int[Card.Suit.values().length];
@@ -90,7 +141,11 @@ public class Hand {
         return maxValue;
     }
 
-    // Override toString method
+    /**
+     * Returns a string representation of the hand, listing each card.
+     * 
+     * @return a string representation of the hand
+     */
     public String toString() {
         String handString = "";
         for (Card card : hand) {
